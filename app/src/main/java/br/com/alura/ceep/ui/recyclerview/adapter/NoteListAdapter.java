@@ -1,0 +1,63 @@
+package br.com.alura.ceep.ui.recyclerview.adapter;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import br.com.alura.ceep.R;
+import br.com.alura.ceep.model.Note;
+
+public class NoteListAdapter extends RecyclerView.Adapter {
+    private final Context context;
+    private final List<Note> noteList;
+
+    public NoteListAdapter(Context context, List<Note> noteList) {
+        this.context = context;
+        this.noteList = noteList;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View viewInflated = LayoutInflater.from(context)
+                .inflate(R.layout.item_note, parent, false);
+
+        return new NoteViewHolder(viewInflated);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Note note = noteList.get(position);
+        setTitle(holder, note);
+        setDescription(holder, note);
+    }
+
+    private void setDescription(RecyclerView.ViewHolder holder, Note note) {
+        TextView description = holder.itemView.findViewById(R.id.item_note_description);
+        description.setText(note.getDescription());
+    }
+
+    private void setTitle(RecyclerView.ViewHolder holder, Note note) {
+        TextView title = holder.itemView.findViewById(R.id.item_note_title);
+        title.setText(note.getTitle());
+    }
+
+    @Override
+    public int getItemCount() {
+        return noteList.size();
+    }
+
+    class NoteViewHolder extends RecyclerView.ViewHolder {
+
+        public NoteViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
+}

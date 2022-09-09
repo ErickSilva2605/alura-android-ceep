@@ -50,8 +50,8 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.item_note_description);
-            description = itemView.findViewById(R.id.item_note_title);
+            title = itemView.findViewById(R.id.item_note_title);
+            description = itemView.findViewById(R.id.item_note_description);
         }
 
         public void bindNote(Note note) {

@@ -27,9 +27,8 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void setMockNoteList() {
         NoteDAO dao = new NoteDAO();
-        for (int i = 1; i <= 10000; i++) {
-            dao.insert(new Note("Teste " + i, "Descrição....... " + i));
-        }
+        dao.insert(new Note("Primeira nota.....", "Descrição ....................... "));
+        dao.insert(new Note("Segunda nota", "Descrição para teste do StaggeredGridLayoutManager...... "));
     }
 
     private void configureNoteRecyclerView() {

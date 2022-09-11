@@ -1,6 +1,8 @@
 package br.com.alura.ceep.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,7 @@ public class NoteListActivity extends AppCompatActivity {
         setTitle(APPBAR_TITLE);
         setMockNoteList();
         configureNoteRecyclerView();
+        configureAddNoteClickListener();
     }
 
     private void setMockNoteList() {
@@ -39,5 +42,15 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void configureAdapter(RecyclerView noteRecyclerView, List<Note> noteList) {
         noteRecyclerView.setAdapter(new NoteListAdapter(this, noteList));
+    }
+
+    private void configureAddNoteClickListener(){
+        TextView addNote = findViewById(R.id.note_list_add_note);
+        addNote.setOnClickListener(view -> openNoteForm());
+    }
+
+    private void openNoteForm() {
+        Intent intent = new Intent(this, NoteFormActivity.class);
+        startActivity(intent);
     }
 }

@@ -17,6 +17,7 @@ import br.com.alura.ceep.ui.recyclerview.adapter.NoteListAdapter;
 public class NoteListActivity extends AppCompatActivity {
 
     public static final String APPBAR_TITLE = "Notas";
+    private final NoteDAO dao = new NoteDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +29,13 @@ public class NoteListActivity extends AppCompatActivity {
         configureAddNoteClickListener();
     }
 
+    @Override
+    protected void onResume() {
+        configureNoteRecyclerView();
+        super.onResume();
+    }
+
     private void setMockNoteList() {
-        NoteDAO dao = new NoteDAO();
         dao.insert(new Note("Primeira nota.....", "Descrição ....................... "));
         dao.insert(new Note("Segunda nota", "Descrição para teste do StaggeredGridLayoutManager...... "));
     }

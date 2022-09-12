@@ -4,9 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Cursos/Alura/Android/RecyclerView/Projetos/Ceep/app/src/main/res/drawable/background_gradient.xml" value="0.12" />
-        <entry key="..\:/Cursos/Alura/Android/RecyclerView/Projetos/Ceep/app/src/main/res/layout/activity_note_form.xml" value="0.25" />
+        <entry key="..\:/Cursos/Alura/Android/RecyclerView/Projetos/Ceep/app/src/main/res/layout/activity_note_form.xml" value="0.1" />
         <entry key="..\:/Cursos/Alura/Android/RecyclerView/Projetos/Ceep/app/src/main/res/layout/activity_note_list.xml" value="0.1" />
         <entry key="..\:/Cursos/Alura/Android/RecyclerView/Projetos/Ceep/app/src/main/res/layout/item_note.xml" value="0.25" />
+        <entry key="..\:/Cursos/Alura/Android/RecyclerView/Projetos/Ceep/app/src/main/res/menu/menu_note_form_save.xml" value="0.24895833333333334" />
       </map>
     </option>
   </component>

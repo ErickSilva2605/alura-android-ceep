@@ -1,5 +1,8 @@
 package br.com.alura.ceep.ui.activity;
 
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_RESULT;
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_RESULT_CODE_NOTE_CREATED;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import br.com.alura.ceep.R;
-import br.com.alura.ceep.dao.NoteDAO;
 import br.com.alura.ceep.model.Note;
 
 public class NoteFormActivity extends AppCompatActivity {
@@ -20,7 +22,6 @@ public class NoteFormActivity extends AppCompatActivity {
     private EditText edtTitle;
     private EditText edtDescription;
     private Note selectedNote = null;
-    private final NoteDAO dao = new NoteDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +44,15 @@ public class NoteFormActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.menu_note_form_save) {
+        if (isMenuNoteFormSave(item)) {
             setNote();
             finishForm();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isMenuNoteFormSave(@NonNull MenuItem item) {
+        return item.getItemId() == R.id.menu_note_form_save;
     }
 
     private void setNote() {
@@ -57,9 +61,13 @@ public class NoteFormActivity extends AppCompatActivity {
     }
 
     private void finishForm() {
-        Intent resultData = new Intent();
-        resultData.putExtra("noteResult", selectedNote);
-        setResult(2, resultData);
+        returnNote();
         finish();
+    }
+
+    private void returnNote() {
+        Intent resultData = new Intent();
+        resultData.putExtra(KEY_NOTE_RESULT, selectedNote);
+        setResult(KEY_RESULT_CODE_NOTE_CREATED, resultData);
     }
 }

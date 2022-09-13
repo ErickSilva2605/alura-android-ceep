@@ -1,10 +1,13 @@
 package br.com.alura.ceep.ui.activity;
 
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_RESULT;
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_REQUEST_CODE_NOTE_CREATE;
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_RESULT_CODE_NOTE_CREATED;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,40 +23,40 @@ public class NoteListActivity extends AppCompatActivity {
     public static final String APPBAR_TITLE = "Notas";
     private final NoteDAO dao = new NoteDAO();
     private NoteListAdapter adapter;
-    private List<Note> noteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
         setTitle(APPBAR_TITLE);
-        setMockNoteList();
         configureNoteRecyclerView();
         configureAddNoteClickListener();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 1
-                && resultCode == 2
-                && data != null
-                && data.hasExtra("noteResult")) {
-            Note noteResult = (Note) data.getSerializableExtra("noteResult");
-            saveNote();
-            adapter.addNote(noteResult);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (isNoteCreatedResult(requestCode, resultCode, data)) {
+            Note noteResult = (Note) data.getSerializableExtra(KEY_NOTE_RESULT);
+            addNote(noteResult);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void setMockNoteList() {
-        dao.insert(new Note("Primeira nota.....", "Descrição ....................... "));
-        dao.insert(new Note("Segunda nota", "Descrição para teste do StaggeredGridLayoutManager...... "));
+    private void addNote(Note noteResult) {
+        saveNote(noteResult);
+        adapter.addNote(noteResult);
+    }
+
+    private boolean isNoteCreatedResult(int requestCode, int resultCode, Intent data) {
+        return requestCode == KEY_REQUEST_CODE_NOTE_CREATE
+                && resultCode == KEY_RESULT_CODE_NOTE_CREATED
+                && data != null
+                && data.hasExtra(KEY_NOTE_RESULT);
     }
 
     private void configureNoteRecyclerView() {
         RecyclerView noteRecyclerView = findViewById(R.id.note_list_recycler_view);
-        noteList = dao.getAll();
-        configureAdapter(noteRecyclerView, noteList);
+        configureAdapter(noteRecyclerView, dao.getAll());
     }
 
     private void configureAdapter(RecyclerView noteRecyclerView, List<Note> noteList) {
@@ -68,7 +71,7 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void openNoteForm() {
         Intent intent = new Intent(this, NoteFormActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, KEY_REQUEST_CODE_NOTE_CREATE);
     }
 
     private void saveNote(Note note) {

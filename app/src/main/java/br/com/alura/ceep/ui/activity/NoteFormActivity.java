@@ -1,5 +1,6 @@
 package br.com.alura.ceep.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +30,6 @@ public class NoteFormActivity extends AppCompatActivity {
         initFields();
     }
 
-
     private void initFields() {
         edtTitle = findViewById(R.id.note_form_title);
         edtDescription = findViewById(R.id.note_form_description);
@@ -57,11 +57,9 @@ public class NoteFormActivity extends AppCompatActivity {
     }
 
     private void finishForm() {
-        saveNote();
+        Intent resultData = new Intent();
+        resultData.putExtra("noteResult", selectedNote);
+        setResult(2, resultData);
         finish();
-    }
-
-    private void saveNote() {
-        dao.insert(selectedNote);
     }
 }

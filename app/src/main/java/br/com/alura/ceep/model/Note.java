@@ -1,6 +1,8 @@
 package br.com.alura.ceep.model;
 
-public class Note {
+import java.io.Serializable;
+
+public class Note implements Serializable {
 
     private final String title;
     private final String description;

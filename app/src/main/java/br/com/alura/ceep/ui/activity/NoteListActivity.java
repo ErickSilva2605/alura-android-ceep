@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,8 @@ public class NoteListActivity extends AppCompatActivity {
 
     public static final String APPBAR_TITLE = "Notas";
     private final NoteDAO dao = new NoteDAO();
+    private NoteListAdapter adapter;
+    private List<Note> noteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +33,16 @@ public class NoteListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        configureNoteRecyclerView();
-        super.onResume();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 1
+                && resultCode == 2
+                && data != null
+                && data.hasExtra("noteResult")) {
+            Note noteResult = (Note) data.getSerializableExtra("noteResult");
+            saveNote();
+            adapter.addNote(noteResult);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void setMockNoteList() {
@@ -42,21 +52,26 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void configureNoteRecyclerView() {
         RecyclerView noteRecyclerView = findViewById(R.id.note_list_recycler_view);
-        List<Note> noteList = new NoteDAO().getAll();
+        noteList = dao.getAll();
         configureAdapter(noteRecyclerView, noteList);
     }
 
     private void configureAdapter(RecyclerView noteRecyclerView, List<Note> noteList) {
-        noteRecyclerView.setAdapter(new NoteListAdapter(this, noteList));
+        adapter = new NoteListAdapter(this, noteList);
+        noteRecyclerView.setAdapter(adapter);
     }
 
-    private void configureAddNoteClickListener(){
+    private void configureAddNoteClickListener() {
         TextView addNote = findViewById(R.id.note_list_add_note);
         addNote.setOnClickListener(view -> openNoteForm());
     }
 
     private void openNoteForm() {
         Intent intent = new Intent(this, NoteFormActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
+
+    private void saveNote(Note note) {
+        dao.insert(note);
     }
 }

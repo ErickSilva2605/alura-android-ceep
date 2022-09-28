@@ -13,6 +13,7 @@ import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Note;
+import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteViewHolder> {
     private final Context context;
@@ -48,9 +49,15 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         return noteList.size();
     }
 
+    public void update(int position, Note note) {
+        noteList.set(position, note);
+        notifyDataSetChanged();
+    }
+
     class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView description;
+        private Note note;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,12 +65,12 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
             title = itemView.findViewById(R.id.item_note_title);
             description = itemView.findViewById(R.id.item_note_description);
 
-            itemView.setOnClickListener(view -> {
-                onItemClickListener.onItemClick();
-            });
+            itemView.setOnClickListener(view -> onItemClickListener.onItemClick(note, getAdapterPosition()));
         }
 
         public void bindNote(Note note) {
+            this.note = note;
+
             title.setText(note.getTitle());
             description.setText(note.getDescription());
         }

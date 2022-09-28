@@ -1,5 +1,7 @@
 package br.com.alura.ceep.ui.activity;
 
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_POSITION;
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_REQUEST;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_RESULT;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_RESULT_CODE_NOTE_CREATED;
 
@@ -22,6 +24,7 @@ public class NoteFormActivity extends AppCompatActivity {
     private EditText edtTitle;
     private EditText edtDescription;
     private Note selectedNote = null;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +32,32 @@ public class NoteFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note_form);
         setTitle(APPBAR_TITLE_ADD);
         initFields();
+        configureIntent();
     }
 
     private void initFields() {
         edtTitle = findViewById(R.id.note_form_title);
         edtDescription = findViewById(R.id.note_form_description);
+    }
+
+    private void configureIntent() {
+        Intent intentData = getIntent();
+
+        if (intentData.hasExtra(KEY_NOTE_REQUEST) && intentData.hasExtra(KEY_NOTE_POSITION)) {
+            setTitle(APPBAR_TITLE_EDIT);
+            selectedNote = (Note) intentData.getSerializableExtra(KEY_NOTE_REQUEST);
+            position = intentData.getIntExtra(KEY_NOTE_POSITION, -1);
+            configureFields();
+        } else {
+            setTitle(APPBAR_TITLE_ADD);
+        }
+    }
+
+    private void configureFields() {
+        if (selectedNote != null) {
+            edtTitle.setText(selectedNote.getTitle());
+            edtDescription.setText(selectedNote.getDescription());
+        }
     }
 
     @Override
@@ -68,6 +92,7 @@ public class NoteFormActivity extends AppCompatActivity {
     private void returnNote() {
         Intent resultData = new Intent();
         resultData.putExtra(KEY_NOTE_RESULT, selectedNote);
+        resultData.putExtra(KEY_NOTE_POSITION, position);
         setResult(KEY_RESULT_CODE_NOTE_CREATED, resultData);
     }
 }

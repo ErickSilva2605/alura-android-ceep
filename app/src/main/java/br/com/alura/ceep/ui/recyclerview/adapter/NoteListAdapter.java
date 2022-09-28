@@ -76,7 +76,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         }
     }
 
-    public void addNote(Note note){
+    public void addNote(Note note) {
         noteList.add(note);
         notifyDataSetChanged();
     }

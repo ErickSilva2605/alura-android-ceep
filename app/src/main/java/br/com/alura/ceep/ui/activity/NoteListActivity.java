@@ -1,15 +1,18 @@
 package br.com.alura.ceep.ui.activity;
 
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_INVALID_POSITION;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_POSITION;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_REQUEST;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_RESULT;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_REQUEST_CODE_NOTE_CREATE;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_REQUEST_CODE_NOTE_EDIT;
-import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_RESULT_CODE_NOTE_CREATED;
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.TEXT_ERROR_TO_EDIT;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,16 +41,30 @@ public class NoteListActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (isNoteCreatedResult(requestCode, resultCode, data)) {
-            Note noteResult = (Note) data.getSerializableExtra(KEY_NOTE_RESULT);
-            createNote(noteResult);
-        } else if (isNoteEditedResult(requestCode, resultCode, data)) {
-            Note noteResult = (Note) data.getSerializableExtra(KEY_NOTE_RESULT);
-            int position = data.getIntExtra(KEY_NOTE_POSITION, -1);
-            editNote(noteResult, position);
+        if (isNoteCreatedResult(requestCode, data)) {
+            if (resultCode == Activity.RESULT_OK) {
+                Note noteResult = (Note) data.getSerializableExtra(KEY_NOTE_RESULT);
+                createNote(noteResult);
+            }
+        }
+
+        if (isNoteEditedResult(requestCode, data)) {
+            if (resultCode == Activity.RESULT_OK) {
+                Note noteResult = (Note) data.getSerializableExtra(KEY_NOTE_RESULT);
+                int positionResult = data.getIntExtra(KEY_NOTE_POSITION, KEY_INVALID_POSITION);
+                if (positionResult > KEY_INVALID_POSITION) {
+                    editNote(noteResult, positionResult);
+                } else {
+                    setErrorToEdit();
+                }
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setErrorToEdit() {
+        Toast.makeText(this, TEXT_ERROR_TO_EDIT, Toast.LENGTH_SHORT).show();
     }
 
     private void createNote(Note noteResult) {
@@ -60,17 +77,14 @@ public class NoteListActivity extends AppCompatActivity {
         adapter.update(position, noteResult);
     }
 
-    private boolean isNoteCreatedResult(int requestCode, int resultCode, Intent data) {
+    private boolean isNoteCreatedResult(int requestCode, Intent data) {
         return requestCode == KEY_REQUEST_CODE_NOTE_CREATE
-                && resultCode == KEY_RESULT_CODE_NOTE_CREATED
                 && data != null
-                && data.hasExtra(KEY_NOTE_RESULT)
-                && data.hasExtra(KEY_NOTE_POSITION);
+                && data.hasExtra(KEY_NOTE_RESULT);
     }
 
-    private boolean isNoteEditedResult(int requestCode, int resultCode, Intent data) {
+    private boolean isNoteEditedResult(int requestCode, Intent data) {
         return requestCode == KEY_REQUEST_CODE_NOTE_EDIT
-                && resultCode == KEY_RESULT_CODE_NOTE_CREATED
                 && data != null
                 && data.hasExtra(KEY_NOTE_RESULT);
     }
@@ -87,9 +101,7 @@ public class NoteListActivity extends AppCompatActivity {
     }
 
     private void configureItemClickListener() {
-        adapter.setOnItemClickListener((note, position) -> {
-            openNoteFormToEdit(note, position);
-        });
+        adapter.setOnItemClickListener(this::openNoteFormToEdit);
     }
 
     private void configureAddNoteClickListener() {

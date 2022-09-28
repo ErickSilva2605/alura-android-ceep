@@ -1,10 +1,11 @@
 package br.com.alura.ceep.ui.activity;
 
+import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_INVALID_POSITION;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_POSITION;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_REQUEST;
 import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_NOTE_RESULT;
-import static br.com.alura.ceep.ui.activity.NoteActivityConstants.KEY_RESULT_CODE_NOTE_CREATED;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,7 +25,7 @@ public class NoteFormActivity extends AppCompatActivity {
     private EditText edtTitle;
     private EditText edtDescription;
     private Note selectedNote = null;
-    private int position;
+    private int position = KEY_INVALID_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +44,10 @@ public class NoteFormActivity extends AppCompatActivity {
     private void configureIntent() {
         Intent intentData = getIntent();
 
-        if (intentData.hasExtra(KEY_NOTE_REQUEST) && intentData.hasExtra(KEY_NOTE_POSITION)) {
+        if (intentData.hasExtra(KEY_NOTE_REQUEST)) {
             setTitle(APPBAR_TITLE_EDIT);
             selectedNote = (Note) intentData.getSerializableExtra(KEY_NOTE_REQUEST);
-            position = intentData.getIntExtra(KEY_NOTE_POSITION, -1);
+            position = intentData.getIntExtra(KEY_NOTE_POSITION, KEY_INVALID_POSITION);
             configureFields();
         } else {
             setTitle(APPBAR_TITLE_ADD);
@@ -93,6 +94,6 @@ public class NoteFormActivity extends AppCompatActivity {
         Intent resultData = new Intent();
         resultData.putExtra(KEY_NOTE_RESULT, selectedNote);
         resultData.putExtra(KEY_NOTE_POSITION, position);
-        setResult(KEY_RESULT_CODE_NOTE_CREATED, resultData);
+        setResult(Activity.RESULT_OK, resultData);
     }
 }

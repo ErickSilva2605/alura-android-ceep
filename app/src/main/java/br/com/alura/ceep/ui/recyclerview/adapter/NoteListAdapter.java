@@ -17,10 +17,15 @@ import br.com.alura.ceep.model.Note;
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteViewHolder> {
     private final Context context;
     private final List<Note> noteList;
+    private OnItemClickListener onItemClickListener;
 
     public NoteListAdapter(Context context, List<Note> noteList) {
         this.context = context;
         this.noteList = noteList;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -43,7 +48,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         return noteList.size();
     }
 
-    static class NoteViewHolder extends RecyclerView.ViewHolder {
+    class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView description;
 
@@ -52,6 +57,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
 
             title = itemView.findViewById(R.id.item_note_title);
             description = itemView.findViewById(R.id.item_note_description);
+
+            itemView.setOnClickListener(view -> {
+                onItemClickListener.onItemClick();
+            });
         }
 
         public void bindNote(Note note) {

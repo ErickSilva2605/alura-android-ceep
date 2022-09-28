@@ -17,6 +17,7 @@ import br.com.alura.ceep.R;
 import br.com.alura.ceep.dao.NoteDAO;
 import br.com.alura.ceep.model.Note;
 import br.com.alura.ceep.ui.recyclerview.adapter.NoteListAdapter;
+import br.com.alura.ceep.ui.recyclerview.adapter.OnItemClickListener;
 
 public class NoteListActivity extends AppCompatActivity {
 
@@ -62,6 +63,9 @@ public class NoteListActivity extends AppCompatActivity {
     private void configureAdapter(RecyclerView noteRecyclerView, List<Note> noteList) {
         adapter = new NoteListAdapter(this, noteList);
         noteRecyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(() -> {
+
+        });
     }
 
     private void configureAddNoteClickListener() {

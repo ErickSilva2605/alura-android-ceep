@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import br.com.alura.ceep.R;
 import br.com.alura.ceep.dao.NoteDAO;
 import br.com.alura.ceep.model.Note;
 import br.com.alura.ceep.ui.recyclerview.adapter.NoteListAdapter;
+import br.com.alura.ceep.ui.recyclerview.helpers.callback.NoteItemTouchHelperCallback;
 
 public class NoteListActivity extends AppCompatActivity {
 
@@ -92,6 +94,8 @@ public class NoteListActivity extends AppCompatActivity {
     private void configureNoteRecyclerView() {
         RecyclerView noteRecyclerView = findViewById(R.id.note_list_recycler_view);
         configureAdapter(noteRecyclerView, dao.getAll());
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new NoteItemTouchHelperCallback());
+        itemTouchHelper.attachToRecyclerView(noteRecyclerView);
     }
 
     private void configureAdapter(RecyclerView noteRecyclerView, List<Note> noteList) {

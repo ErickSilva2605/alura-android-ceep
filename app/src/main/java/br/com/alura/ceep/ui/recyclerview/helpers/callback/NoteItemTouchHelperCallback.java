@@ -24,7 +24,11 @@ public class NoteItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        return false;
+        int initialPosition = viewHolder.getAdapterPosition();
+        int finalPosition = target.getAdapterPosition();
+        new NoteDAO().swap(initialPosition, finalPosition);
+        adapter.swap(initialPosition, finalPosition);
+        return true;
     }
 
     @Override

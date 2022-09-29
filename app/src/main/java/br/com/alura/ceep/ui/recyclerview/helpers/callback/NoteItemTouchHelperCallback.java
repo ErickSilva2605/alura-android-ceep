@@ -4,7 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import br.com.alura.ceep.dao.NoteDAO;
+import br.com.alura.ceep.ui.recyclerview.adapter.NoteListAdapter;
+
 public class NoteItemTouchHelperCallback extends ItemTouchHelper.Callback {
+
+    private final NoteListAdapter adapter;
+
+    public NoteItemTouchHelperCallback(NoteListAdapter adapter) {
+        this.adapter = adapter;
+    }
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
@@ -19,6 +28,8 @@ public class NoteItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
+        int notePosition = viewHolder.getAdapterPosition();
+        new NoteDAO().remove(notePosition);
+        adapter.remove(notePosition);
     }
 }

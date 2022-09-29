@@ -94,7 +94,11 @@ public class NoteListActivity extends AppCompatActivity {
     private void configureNoteRecyclerView() {
         RecyclerView noteRecyclerView = findViewById(R.id.note_list_recycler_view);
         configureAdapter(noteRecyclerView, dao.getAll());
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new NoteItemTouchHelperCallback());
+        configureItemTouchHelper(noteRecyclerView);
+    }
+
+    private void configureItemTouchHelper(RecyclerView noteRecyclerView) {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new NoteItemTouchHelperCallback(adapter));
         itemTouchHelper.attachToRecyclerView(noteRecyclerView);
     }
 

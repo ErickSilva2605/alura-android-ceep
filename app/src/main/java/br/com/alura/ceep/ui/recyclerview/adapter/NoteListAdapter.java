@@ -54,6 +54,11 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         notifyDataSetChanged();
     }
 
+    public void remove(int position) {
+        noteList.remove(position);
+        notifyDataSetChanged();
+    }
+
     class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView description;

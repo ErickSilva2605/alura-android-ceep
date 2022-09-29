@@ -52,17 +52,17 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
 
     public void update(int position, Note note) {
         noteList.set(position, note);
-        notifyDataSetChanged();
+        notifyItemChanged(position);
     }
 
     public void remove(int position) {
         noteList.remove(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
     }
 
     public void swap(int initialPosition, int finalPosition) {
         Collections.swap(noteList, initialPosition, finalPosition);
-        notifyDataSetChanged();
+        notifyItemMoved(initialPosition, finalPosition);
     }
 
     class NoteViewHolder extends RecyclerView.ViewHolder {
@@ -89,6 +89,6 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
 
     public void addNote(Note note) {
         noteList.add(note);
-        notifyDataSetChanged();
+        notifyItemInserted(noteList.size() - 1);
     }
 }

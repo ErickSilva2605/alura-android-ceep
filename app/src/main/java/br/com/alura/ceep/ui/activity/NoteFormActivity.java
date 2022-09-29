@@ -48,10 +48,11 @@ public class NoteFormActivity extends AppCompatActivity {
             setTitle(APPBAR_TITLE_EDIT);
             selectedNote = (Note) intentData.getSerializableExtra(KEY_NOTE_REQUEST);
             position = intentData.getIntExtra(KEY_NOTE_POSITION, KEY_INVALID_POSITION);
-            configureFields();
         } else {
             setTitle(APPBAR_TITLE_ADD);
         }
+
+        configureFields();
     }
 
     private void configureFields() {
@@ -59,6 +60,8 @@ public class NoteFormActivity extends AppCompatActivity {
             edtTitle.setText(selectedNote.getTitle());
             edtDescription.setText(selectedNote.getDescription());
         }
+
+        edtTitle.requestFocus();
     }
 
     @Override
